@@ -21,8 +21,9 @@ Included in the initial MVP:
 
 Add:
 
-* SARIF output
-* GitHub code-scanning annotations
+* [x] SARIF 2.1.0 output
+* [x] GitHub code-scanning workflow documentation
+* [ ] GitHub code-scanning annotations in the ui-guard repository demo
 * improved diagnostics
 * configuration validation
 * include and exclude patterns

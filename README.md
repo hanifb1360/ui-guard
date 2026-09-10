@@ -136,10 +136,16 @@ ui-guard check src \
   --config ui-guard.config.mjs
 ```
 
-Machine-readable output:
+Machine-readable JSON output:
 
 ```bash
 ui-guard check src --json
+```
+
+Generate SARIF 2.1.0 output for CI and code-scanning tools:
+
+```bash
+ui-guard check src --sarif ui-guard.sarif
 ```
 
 Generate an initial configuration:
@@ -161,6 +167,61 @@ src/Checkout.tsx:5:16  error  no-hardcoded-colors
 src/Checkout.tsx:6:21  error  no-unknown-tokens
   Unknown design token "--color-brand".
 ```
+
+## GitHub code scanning
+
+`ui-guard` can generate SARIF 2.1.0 so violations can be uploaded to GitHub code scanning.
+
+A GitHub Actions workflow can run the analyzer, upload its diagnostics, and still fail the build when policy errors are found:
+
+```yaml
+name: UI Guard
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  ui-guard:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ui-guard
+        id: ui_guard
+        continue-on-error: true
+        run: npx ui-guard check src --sarif ui-guard.sarif
+
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: ui-guard.sarif
+          category: ui-guard
+
+      - name: Fail on policy violations
+        if: steps.ui_guard.outcome == 'failure'
+        run: exit 1
+```
+
+The analyzer writes the SARIF file before returning a non-zero exit code, allowing CI to upload diagnostics and then enforce the policy.
 
 ## Programmatic API
 

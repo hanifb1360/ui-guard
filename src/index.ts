@@ -15,6 +15,15 @@ export {
   collectSourceFiles,
 } from './files';
 
+export {
+  diagnosticsToSarif,
+} from './sarif';
+
+export type {
+  SarifLog,
+  SarifOptions,
+} from './sarif';
+
 export type {
   AnalyzeResult,
   AnalyzeSourceInput,

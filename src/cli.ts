@@ -1,8 +1,10 @@
 import {
+  mkdir,
   writeFile,
 } from 'node:fs/promises';
 
 import {
+  dirname,
   relative,
   resolve,
 } from 'node:path';
@@ -15,6 +17,10 @@ import {
   loadConfig,
 } from './config';
 
+import {
+  diagnosticsToSarif,
+} from './sarif';
+
 import type {
   Diagnostic,
 } from './types';
@@ -24,7 +30,7 @@ function printHelp(): void {
 ui-guard
 
 Usage:
-  ui-guard check [paths...] [--config path] [--json]
+  ui-guard check [paths...] [--config path] [--json] [--sarif file]
   ui-guard init
   ui-guard --help
 
@@ -33,6 +39,7 @@ Examples:
   ui-guard check src app
   ui-guard check src --config ui-guard.config.mjs
   ui-guard check src --json
+  ui-guard check src --sarif ui-guard.sarif
 `);
 }
 
@@ -117,9 +124,7 @@ export default config;
         flag: 'wx',
       }
     );
-  } catch (
-    error
-  ) {
+  } catch (error) {
     if (
       error
       && typeof error === 'object'
@@ -142,6 +147,7 @@ export default config;
 interface ParsedCheckArguments {
   paths: string[];
   configPath?: string;
+  sarifPath?: string;
   json: boolean;
 }
 
@@ -149,7 +155,15 @@ function parseCheckArguments(
   args: string[]
 ): ParsedCheckArguments {
   const paths: string[] = [];
-  let configPath: string | undefined;
+
+  let configPath:
+    | string
+    | undefined;
+
+  let sarifPath:
+    | string
+    | undefined;
+
   let json = false;
 
   for (
@@ -165,7 +179,8 @@ function parseCheckArguments(
     }
 
     if (argument === '--config') {
-      const next = args[index + 1];
+      const next =
+        args[index + 1];
 
       if (!next) {
         throw new Error(
@@ -174,6 +189,21 @@ function parseCheckArguments(
       }
 
       configPath = next;
+      index += 1;
+      continue;
+    }
+
+    if (argument === '--sarif') {
+      const next =
+        args[index + 1];
+
+      if (!next) {
+        throw new Error(
+          '--sarif requires an output file path.'
+        );
+      }
+
+      sarifPath = next;
       index += 1;
       continue;
     }
@@ -192,21 +222,69 @@ function parseCheckArguments(
     }
   }
 
-  const parsed: ParsedCheckArguments = {
-    paths:
-      paths.length > 0
-        ? paths
-        : [
-            'src',
-          ],
-    json,
-  };
+  const parsed:
+    ParsedCheckArguments = {
+      paths:
+        paths.length > 0
+          ? paths
+          : [
+              'src',
+            ],
+
+      json,
+    };
 
   if (configPath) {
-    parsed.configPath = configPath;
+    parsed.configPath =
+      configPath;
+  }
+
+  if (sarifPath) {
+    parsed.sarifPath =
+      sarifPath;
   }
 
   return parsed;
+}
+
+async function writeSarifFile(
+  outputPath: string,
+  diagnostics: Diagnostic[]
+): Promise<string> {
+  const absoluteOutput =
+    resolve(
+      process.cwd(),
+      outputPath
+    );
+
+  await mkdir(
+    dirname(
+      absoluteOutput
+    ),
+    {
+      recursive: true,
+    }
+  );
+
+  const sarif =
+    diagnosticsToSarif(
+      diagnostics,
+      {
+        cwd:
+          process.cwd(),
+      }
+    );
+
+  await writeFile(
+    absoluteOutput,
+    `${JSON.stringify(
+      sarif,
+      null,
+      2
+    )}\n`
+  );
+
+  return absoluteOutput;
 }
 
 async function runCheck(
@@ -215,15 +293,29 @@ async function runCheck(
   const parsed =
     parseCheckArguments(args);
 
-  const config = await loadConfig(
-    process.cwd(),
-    parsed.configPath
-  );
+  const config =
+    await loadConfig(
+      process.cwd(),
+      parsed.configPath
+    );
 
-  const result = await analyzePaths(
-    parsed.paths,
-    config
-  );
+  const result =
+    await analyzePaths(
+      parsed.paths,
+      config
+    );
+
+  let sarifOutput:
+    | string
+    | undefined;
+
+  if (parsed.sarifPath) {
+    sarifOutput =
+      await writeSarifFile(
+        parsed.sarifPath,
+        result.diagnostics
+      );
+  }
 
   if (parsed.json) {
     console.log(
@@ -233,43 +325,57 @@ async function runCheck(
         2
       )
     );
-  } else if (
-    result.diagnostics.length === 0
-  ) {
-    console.log(
-      `✓ ui-guard: no violations found in ${result.files.length} file(s).`
-    );
   } else {
-    for (
-      const diagnostic
-      of result.diagnostics
-    ) {
-      printDiagnostic(
-        diagnostic
+    if (sarifOutput) {
+      console.log(
+        `SARIF written to ${displayPath(sarifOutput)}`
       );
+
+      console.log('');
     }
 
-    const errors =
-      result.diagnostics.filter(
-        diagnostic =>
-          diagnostic.severity === 'error'
-      ).length;
+    if (
+      result.diagnostics.length
+      === 0
+    ) {
+      console.log(
+        `✓ ui-guard: no violations found in ${result.files.length} file(s).`
+      );
+    } else {
+      for (
+        const diagnostic
+        of result.diagnostics
+      ) {
+        printDiagnostic(
+          diagnostic
+        );
+      }
 
-    const warnings =
-      result.diagnostics.filter(
-        diagnostic =>
-          diagnostic.severity === 'warning'
-      ).length;
+      const errors =
+        result.diagnostics.filter(
+          diagnostic =>
+            diagnostic.severity
+            === 'error'
+        ).length;
 
-    console.log(
-      `${errors} error(s), ${warnings} warning(s) in ${result.files.length} file(s).`
-    );
+      const warnings =
+        result.diagnostics.filter(
+          diagnostic =>
+            diagnostic.severity
+            === 'warning'
+        ).length;
+
+      console.log(
+        `${errors} error(s), ${warnings} warning(s) in ${result.files.length} file(s).`
+      );
+    }
   }
 
   if (
     result.diagnostics.some(
       diagnostic =>
-        diagnostic.severity === 'error'
+        diagnostic.severity
+        === 'error'
     )
   ) {
     process.exitCode = 1;
@@ -277,7 +383,8 @@ async function runCheck(
 }
 
 async function main(): Promise<void> {
-  const args = process.argv.slice(2);
+  const args =
+    process.argv.slice(2);
 
   if (
     args.length === 0
@@ -289,7 +396,8 @@ async function main(): Promise<void> {
     return;
   }
 
-  const command = args[0];
+  const command =
+    args[0];
 
   if (command === 'init') {
     await createInitialConfig();
@@ -300,6 +408,7 @@ async function main(): Promise<void> {
     await runCheck(
       args.slice(1)
     );
+
     return;
   }
 
