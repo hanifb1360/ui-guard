@@ -1,0 +1,77 @@
+{
+  "name": "@hb1360/ui-guard",
+  "version": "0.1.0",
+  "description": "A TypeScript policy engine for enforcing design-system rules across React code, CI, and AI-assisted development.",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "ui-guard": "./dist/cli.mjs"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "typecheck": "tsc --noEmit",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:esm": "esbuild src/index.ts --bundle --packages=external --platform=node --format=esm --target=node22 --outfile=dist/index.mjs",
+    "build:cjs": "esbuild src/index.ts --bundle --packages=external --platform=node --format=cjs --target=node22 --outfile=dist/index.cjs",
+    "build:cli": "esbuild src/cli.ts --bundle --packages=external --platform=node --format=esm --target=node22 --banner:js=\"#!/usr/bin/env node\" --outfile=dist/cli.mjs && node -e \"require('node:fs').chmodSync('dist/cli.mjs', 0o755)\"",
+    "build": "npm run clean && npm run typecheck && npm run build:types && npm run build:esm && npm run build:cjs && npm run build:cli",
+    "test": "npm run build && node --test",
+    "test:consumer": "node scripts/consumer-check.mjs",
+    "demo": "npm run build && node dist/cli.mjs check examples/acme/src --config examples/acme/ui-guard.config.mjs",
+    "prepack": "npm run build"
+  },
+  "keywords": [
+    "react",
+    "typescript",
+    "design-system",
+    "accessibility",
+    "static-analysis",
+    "lint",
+    "developer-tools",
+    "ai",
+    "ci"
+  ],
+  "author": "Hanif Bahari",
+  "license": "MIT",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hanifb1360/ui-guard.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hanifb1360/ui-guard/issues"
+  },
+  "homepage": "https://github.com/hanifb1360/ui-guard#readme",
+  "dependencies": {
+    "@babel/parser": "^8.0.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.2",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
+  }
+}
