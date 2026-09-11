@@ -34,3 +34,9 @@ The project follows Semantic Versioning.
 * Modernized `ui-guard init` template with component prop policies and all current rules.
 * Live GitHub Code Scanning demo workflow backed by `ui-guard` SARIF output.
 * CI verification that the demo SARIF contains the expected rule IDs and result count.
+
+### Changed
+
+* Marked the ESLint peer dependency as optional so CLI and core API consumers do not need ESLint installed.
+* Updated documentation to include all four public rules.
+* Marked the live GitHub Code Scanning integration as verified on `main`.
