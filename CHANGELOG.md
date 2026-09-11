@@ -8,8 +8,8 @@ The project follows Semantic Versioning.
 
 ### Changed
 
-* Renamed the npm package from `@hb1360/ui-guard` to `ui-guard`.
-* The ESLint adapter is now imported from `ui-guard/eslint`.
+* Renamed the npm package from `@hb1360/ui-guard` to `design-system-guard`.
+* The ESLint adapter is now imported from `design-system-guard/eslint`.
 
 ## 0.1.0 - 2026-09-11
 

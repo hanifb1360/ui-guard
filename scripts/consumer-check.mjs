@@ -116,7 +116,7 @@ import {
   analyzeSource,
   defineConfig,
   validateConfig,
-} from 'ui-guard';
+} from 'design-system-guard';
 
 const config = defineConfig({
   tokens: ['--color-primary'],
@@ -145,7 +145,7 @@ if (!Array.isArray(result)) {
 import {
   createEslintConfig,
   createEslintPlugin,
-} from 'ui-guard/eslint';
+} from 'design-system-guard/eslint';
 
 const plugin = createEslintPlugin({
   components: {
@@ -183,7 +183,7 @@ if (!config.plugins['ui-guard']) {
     `
 const {
   analyzeSource,
-} = require('ui-guard');
+} = require('design-system-guard');
 
 const result = analyzeSource({
   filePath: 'demo.tsx',
