@@ -6,6 +6,12 @@ The project follows Semantic Versioning.
 
 ## Unreleased
 
+## 0.1.3 - 2026-09-12
+
+### Changed
+
+* Updated GitHub repository, issue, homepage, and SARIF documentation links after the repository rename.
+
 ## 0.1.2 - 2026-09-12
 
 ### Changed

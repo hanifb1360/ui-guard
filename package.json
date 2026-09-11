@@ -1,6 +1,6 @@
 {
   "name": "design-system-guard",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A TypeScript policy engine for enforcing design-system rules across React code, CI, and AI-assisted development.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -64,12 +64,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hanifb1360/ui-guard.git"
+    "url": "git+https://github.com/hanifb1360/design-system-guard.git"
   },
   "bugs": {
-    "url": "https://github.com/hanifb1360/ui-guard/issues"
+    "url": "https://github.com/hanifb1360/design-system-guard/issues"
   },
-  "homepage": "https://github.com/hanifb1360/ui-guard#readme",
+  "homepage": "https://github.com/hanifb1360/design-system-guard#readme",
   "dependencies": {
     "@babel/parser": "^8.0.5"
   },
