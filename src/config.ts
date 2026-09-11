@@ -15,6 +15,11 @@ import {
   loadTokenSources,
 } from './tokens';
 
+import {
+  ConfigValidationError,
+  validateConfig,
+} from './validation';
+
 import type {
   RuleConfiguration,
   RuleId,
@@ -22,22 +27,40 @@ import type {
   UIGuardConfig,
 } from './types';
 
-const DEFAULT_RULES: Required<RuleConfiguration> = {
-  'component-prop-policy': 'error',
-  'no-hardcoded-colors': 'error',
-  'prefer-design-system-components': 'error',
-  'no-unknown-tokens': 'error',
-};
+const DEFAULT_RULES:
+  Required<RuleConfiguration> = {
+    'component-prop-policy':
+      'error',
 
-export function defineConfig<T extends UIGuardConfig>(
+    'no-hardcoded-colors':
+      'error',
+
+    'prefer-design-system-components':
+      'error',
+
+    'no-unknown-tokens':
+      'error',
+  };
+
+export function defineConfig<
+  T extends UIGuardConfig
+>(
   config: T
 ): T {
+  validateConfig(
+    config
+  );
+
   return config;
 }
 
 export function normalizeConfig(
   config: UIGuardConfig = {}
 ): UIGuardConfig {
+  validateConfig(
+    config
+  );
+
   return {
     components: {
       ...(config.components ?? {}),
@@ -63,7 +86,9 @@ export async function resolveConfig(
   cwd = process.cwd()
 ): Promise<UIGuardConfig> {
   const normalized =
-    normalizeConfig(config);
+    normalizeConfig(
+      config
+    );
 
   const discoveredTokens =
     await loadTokenSources(
@@ -95,43 +120,64 @@ async function exists(
   filePath: string
 ): Promise<boolean> {
   try {
-    await access(filePath);
+    await access(
+      filePath
+    );
+
     return true;
   } catch {
     return false;
   }
 }
 
+function validationErrorForFile(
+  error: ConfigValidationError,
+  filePath: string
+): ConfigValidationError {
+  return new ConfigValidationError(
+    error.path,
+    `${error.reason}. Config file: ${filePath}`
+  );
+}
+
 export async function loadConfig(
   cwd = process.cwd(),
   explicitPath?: string
 ): Promise<UIGuardConfig> {
-  const candidates = explicitPath
-    ? [
-        resolve(
-          cwd,
-          explicitPath
-        ),
-      ]
-    : [
-        resolve(
-          cwd,
-          'ui-guard.config.mjs'
-        ),
+  const candidates =
+    explicitPath
+      ? [
+          resolve(
+            cwd,
+            explicitPath
+          ),
+        ]
+      : [
+          resolve(
+            cwd,
+            'ui-guard.config.mjs'
+          ),
 
-        resolve(
-          cwd,
-          'ui-guard.config.js'
-        ),
+          resolve(
+            cwd,
+            'ui-guard.config.js'
+          ),
 
-        resolve(
-          cwd,
-          'ui-guard.config.cjs'
-        ),
-      ];
+          resolve(
+            cwd,
+            'ui-guard.config.cjs'
+          ),
+        ];
 
-  for (const candidate of candidates) {
-    if (!(await exists(candidate))) {
+  for (
+    const candidate
+    of candidates
+  ) {
+    if (
+      !(await exists(
+        candidate
+      ))
+    ) {
       continue;
     }
 
@@ -146,19 +192,24 @@ export async function loadConfig(
       imported.default
       ?? imported;
 
-    if (
-      !rawConfig
-      || typeof rawConfig !== 'object'
-    ) {
-      throw new TypeError(
-        `Invalid ui-guard configuration in ${candidate}`
+    try {
+      return await resolveConfig(
+        rawConfig as UIGuardConfig,
+        dirname(candidate)
       );
-    }
+    } catch (error) {
+      if (
+        error
+        instanceof ConfigValidationError
+      ) {
+        throw validationErrorForFile(
+          error,
+          candidate
+        );
+      }
 
-    return resolveConfig(
-      rawConfig as UIGuardConfig,
-      dirname(candidate)
-    );
+      throw error;
+    }
   }
 
   if (explicitPath) {

@@ -27,6 +27,11 @@ export {
   loadTokenSources,
 } from './tokens';
 
+export {
+  ConfigValidationError,
+  validateConfig,
+} from './validation';
+
 export type {
   SarifLog,
   SarifOptions,

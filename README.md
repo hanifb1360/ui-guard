@@ -115,6 +115,76 @@ const config = {
 export default config;
 ```
 
+## Configuration validation
+
+`ui-guard` validates its configuration at runtime, including JavaScript configuration files.
+
+Validation covers:
+
+- supported top-level options
+- component `name` and `from` fields
+- component prop policies
+- allowed prop values
+- contradictory prop policies
+- CSS custom-property token names
+- token-source objects and formats
+- known rule IDs
+- `off`, `warn`, and `error` rule levels
+
+Configuration errors include the exact path that needs attention.
+
+For example:
+
+```text
+rules.component-prop-policy: expected "off", "warn", or "error"
+```
+
+or:
+
+```text
+components.button.props.variant.allowed[2]: expected a string, finite number, boolean, or null
+```
+
+The same validation is used by the CLI, programmatic API, analyzer, and ESLint adapter.
+
+For programmatic validation:
+
+```ts
+import {
+  ConfigValidationError,
+  validateConfig,
+} from '@hb1360/ui-guard';
+
+try {
+  validateConfig(config);
+} catch (error) {
+  if (
+    error instanceof
+      ConfigValidationError
+  ) {
+    console.error(
+      error.path,
+      error.reason,
+    );
+  }
+}
+```
+
+`defineConfig()` also validates before returning the configuration:
+
+```ts
+import {
+  defineConfig,
+} from '@hb1360/ui-guard';
+
+export default defineConfig({
+  rules: {
+    'component-prop-policy':
+      'error',
+  },
+});
+```
+
 ## Component prop policies
 
 `ui-guard` can enforce the public prop contract of an approved design-system component.

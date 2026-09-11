@@ -114,11 +114,14 @@ try {
 import {
   analyzeSource,
   defineConfig,
+  validateConfig,
 } from '@hb1360/ui-guard';
 
 const config = defineConfig({
   tokens: ['--color-primary'],
 });
+
+validateConfig(config);
 
 const result = analyzeSource({
   filePath: 'demo.tsx',
