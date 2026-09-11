@@ -21,3 +21,6 @@ The project follows Semantic Versioning.
 * GitHub Actions CI.
 * SARIF 2.1.0 output for code-scanning integrations.
 * `--sarif` CLI output with file, line, column, rule, severity, and suggestion metadata.
+* ESLint flat-config adapter backed by the same `ui-guard` analysis engine.
+* `@hb1360/ui-guard/eslint` package export.
+* Shared `off`, `warn`, and `error` severity between CLI and ESLint.

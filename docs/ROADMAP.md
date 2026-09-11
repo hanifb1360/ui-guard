@@ -31,9 +31,14 @@ Add:
 
 ## Phase 3 — ESLint integration
 
-Build an ESLint adapter backed by the same rule implementations.
+* [x] Flat-config compatible ESLint adapter
+* [x] Reuse the same `ui-guard` analysis engine
+* [x] Preserve `off`, `warn`, and `error` severity
+* [x] Expose individual ESLint rule IDs
+* [x] Test the packaged ESLint subpath export
+* [ ] Add richer editor examples
 
-The CLI and ESLint integration must not maintain separate copies of rule logic.
+The CLI and ESLint integration use the same analysis engine rather than maintaining separate copies of rule logic.
 
 ## Phase 4 — Better design-system intelligence
 

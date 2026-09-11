@@ -135,6 +135,45 @@ if (!Array.isArray(result)) {
   writeFileSync(
     join(
       temporaryDirectory,
+      'eslint.mjs'
+    ),
+    `
+import {
+  createEslintConfig,
+  createEslintPlugin,
+} from '@hb1360/ui-guard/eslint';
+
+const plugin = createEslintPlugin({
+  components: {
+    button: {
+      name: 'Button',
+      from: '@acme/ui',
+    },
+  },
+});
+
+const config = createEslintConfig({
+  components: {
+    button: {
+      name: 'Button',
+      from: '@acme/ui',
+    },
+  },
+});
+
+if (!plugin.rules['prefer-design-system-components']) {
+  throw new Error('ESLint plugin export failed.');
+}
+
+if (!config.plugins['ui-guard']) {
+  throw new Error('ESLint flat config export failed.');
+}
+`
+  );
+
+  writeFileSync(
+    join(
+      temporaryDirectory,
       'cjs.cjs'
     ),
     `
@@ -161,6 +200,17 @@ if (!Array.isArray(result)) {
     process.execPath,
     [
       'esm.mjs',
+    ]
+  );
+
+  console.log(
+    'Testing ESLint subpath consumer...'
+  );
+
+  run(
+    process.execPath,
+    [
+      'eslint.mjs',
     ]
   );
 
