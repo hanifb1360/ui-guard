@@ -8,6 +8,7 @@ export type Severity =
   | 'error';
 
 export type RuleId =
+  | 'component-prop-policy'
   | 'no-hardcoded-colors'
   | 'prefer-design-system-components'
   | 'no-unknown-tokens';
@@ -25,19 +26,65 @@ export type TokenSourceInput =
   | string
   | TokenSource;
 
+export type ComponentPropValue =
+  | string
+  | number
+  | boolean
+  | null;
+
+export interface ComponentPropPolicy {
+  /**
+   * Static values accepted for this prop.
+   *
+   * Dynamic expressions are intentionally not rejected
+   * because ui-guard cannot know their runtime value.
+   */
+  allowed?: ComponentPropValue[];
+
+  /**
+   * Require the prop to be present.
+   */
+  required?: boolean;
+
+  /**
+   * Reject the prop completely.
+   */
+  forbidden?: boolean;
+
+  /**
+   * Report use of the prop as deprecated.
+   */
+  deprecated?: boolean;
+
+  /**
+   * Suggested replacement for a forbidden or
+   * deprecated prop.
+   */
+  replacement?: string;
+}
+
 export interface DesignSystemComponent {
   name: string;
   from: string;
+
+  props?: Record<
+    string,
+    ComponentPropPolicy
+  >;
 }
 
 export interface RuleConfiguration {
+  'component-prop-policy'?: RuleLevel;
   'no-hardcoded-colors'?: RuleLevel;
   'prefer-design-system-components'?: RuleLevel;
   'no-unknown-tokens'?: RuleLevel;
 }
 
 export interface UIGuardConfig {
-  components?: Record<string, DesignSystemComponent>;
+  components?: Record<
+    string,
+    DesignSystemComponent
+  >;
 
   /**
    * Tokens declared directly in configuration.
@@ -57,7 +104,10 @@ export interface UIGuardConfig {
 }
 
 export interface Diagnostic {
-  ruleId: RuleId | 'parse-error';
+  ruleId:
+    | RuleId
+    | 'parse-error';
+
   severity: Severity;
   message: string;
   filePath: string;

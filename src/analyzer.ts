@@ -16,6 +16,10 @@ import {
 } from './files';
 
 import {
+  checkComponentPropPolicy,
+} from './rules/componentPropPolicy';
+
+import {
   checkNoHardcodedColors,
 } from './rules/noHardcodedColors';
 
@@ -127,6 +131,12 @@ export function analyzeSource(
   }
 
   const diagnostics = [
+    ...checkComponentPropPolicy(
+      ast,
+      input.filePath,
+      config
+    ),
+
     ...checkPreferDesignSystemComponents(
       ast,
       input.filePath,

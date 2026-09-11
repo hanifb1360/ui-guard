@@ -3,6 +3,30 @@ const config = {
     button: {
       name: 'Button',
       from: '@acme/ui',
+
+      props: {
+        variant: {
+          allowed: [
+            'primary',
+            'secondary',
+            'danger',
+          ],
+        },
+
+        size: {
+          allowed: [
+            'sm',
+            'md',
+            'lg',
+          ],
+        },
+
+        legacyColor: {
+          deprecated: true,
+          replacement:
+            'variant',
+        },
+      },
     },
 
     input: {

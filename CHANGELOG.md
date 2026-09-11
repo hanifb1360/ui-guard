@@ -27,3 +27,5 @@ The project follows Semantic Versioning.
 * CSS custom-property token-source discovery.
 * JSON token-source discovery for explicit CSS variables, `$value`, and `value` token objects.
 * Config-relative token-source resolution with manual/discovered token merging and deduplication.
+* Component prop contracts for allowed values, required props, forbidden props, and deprecated props.
+* Import-source-aware component matching with support for aliased named imports.

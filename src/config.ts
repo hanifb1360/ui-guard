@@ -23,6 +23,7 @@ import type {
 } from './types';
 
 const DEFAULT_RULES: Required<RuleConfiguration> = {
+  'component-prop-policy': 'error',
   'no-hardcoded-colors': 'error',
   'prefer-design-system-components': 'error',
   'no-unknown-tokens': 'error',

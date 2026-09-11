@@ -86,6 +86,7 @@ export interface UIGuardFlatEslintConfig {
 
 const RULE_IDS:
   readonly RuleId[] = [
+    'component-prop-policy',
     'prefer-design-system-components',
     'no-hardcoded-colors',
     'no-unknown-tokens',
@@ -93,6 +94,9 @@ const RULE_IDS:
 
 const RULE_DESCRIPTIONS:
   Record<RuleId, string> = {
+    'component-prop-policy':
+      'Enforce configured contracts for design-system component props.',
+
     'prefer-design-system-components':
       'Prefer configured design-system components over raw HTML elements.',
 

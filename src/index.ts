@@ -35,6 +35,8 @@ export type {
 export type {
   AnalyzeResult,
   AnalyzeSourceInput,
+  ComponentPropPolicy,
+  ComponentPropValue,
   DesignSystemComponent,
   Diagnostic,
   RuleConfiguration,

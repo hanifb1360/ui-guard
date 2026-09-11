@@ -115,6 +115,110 @@ const config = {
 export default config;
 ```
 
+## Component prop policies
+
+`ui-guard` can enforce the public prop contract of an approved design-system component.
+
+```js
+const config = {
+  components: {
+    button: {
+      name: 'Button',
+      from: '@acme/ui',
+
+      props: {
+        variant: {
+          allowed: [
+            'primary',
+            'secondary',
+            'danger',
+          ],
+        },
+
+        size: {
+          allowed: [
+            'sm',
+            'md',
+            'lg',
+          ],
+        },
+
+        ariaLabel: {
+          required: true,
+        },
+
+        debug: {
+          forbidden: true,
+        },
+
+        legacyColor: {
+          deprecated: true,
+          replacement: 'variant',
+        },
+      },
+    },
+  },
+};
+
+export default config;
+```
+
+Given:
+
+```tsx
+import {
+  Button,
+} from '@acme/ui';
+
+export function Example() {
+  return (
+    <Button
+      variant="banana"
+      size="huge"
+      debug
+      legacyColor="red"
+    >
+      Save
+    </Button>
+  );
+}
+```
+
+`ui-guard` can report:
+
+```text
+<Button> prop "variant" received "banana", which is not allowed.
+Allowed values: "primary", "secondary", "danger".
+
+<Button> prop "size" received "huge", which is not allowed.
+Allowed values: "sm", "md", "lg".
+
+<Button> requires prop "ariaLabel".
+
+Prop "debug" is forbidden on <Button>.
+
+Prop "legacyColor" is deprecated on <Button>.
+Use "variant" instead.
+```
+
+The `component-prop-policy` rule verifies that the JSX component comes from the configured package before applying the contract. Named import aliases are supported:
+
+```tsx
+import {
+  Button as PrimaryButton,
+} from '@acme/ui';
+
+<PrimaryButton variant="primary" />
+```
+
+Allowed-value validation is conservative. Literal strings, numbers, booleans, `null`, negative numeric literals, boolean shorthand props, and expression-free template literals can be checked statically. Dynamic expressions are left alone because their runtime value cannot be determined safely:
+
+```tsx
+<Button variant={variantFromApi} />
+```
+
+Presence-based policies such as `required`, `forbidden`, and `deprecated` are still enforceable regardless of a prop's runtime value.
+
 ## Design-token sources
 
 Token names do not have to be copied manually into the configuration.
