@@ -9,6 +9,7 @@ export {
   getRuleLevel,
   loadConfig,
   normalizeConfig,
+  resolveConfig,
 } from './config';
 
 export {
@@ -18,6 +19,13 @@ export {
 export {
   diagnosticsToSarif,
 } from './sarif';
+
+export {
+  extractCssCustomProperties,
+  extractJsonDesignTokens,
+  loadTokenSource,
+  loadTokenSources,
+} from './tokens';
 
 export type {
   SarifLog,
@@ -33,5 +41,8 @@ export type {
   RuleId,
   RuleLevel,
   Severity,
+  TokenSource,
+  TokenSourceFormat,
+  TokenSourceInput,
   UIGuardConfig,
 } from './types';

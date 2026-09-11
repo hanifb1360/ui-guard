@@ -3,12 +3,17 @@ import {
 } from 'node:fs/promises';
 
 import {
+  dirname,
   resolve,
 } from 'node:path';
 
 import {
   pathToFileURL,
 } from 'node:url';
+
+import {
+  loadTokenSources,
+} from './tokens';
 
 import type {
   RuleConfiguration,
@@ -41,10 +46,39 @@ export function normalizeConfig(
       ...(config.tokens ?? []),
     ],
 
+    tokenSources: [
+      ...(config.tokenSources ?? []),
+    ],
+
     rules: {
       ...DEFAULT_RULES,
       ...(config.rules ?? {}),
     },
+  };
+}
+
+export async function resolveConfig(
+  config: UIGuardConfig = {},
+  cwd = process.cwd()
+): Promise<UIGuardConfig> {
+  const normalized =
+    normalizeConfig(config);
+
+  const discoveredTokens =
+    await loadTokenSources(
+      normalized.tokenSources ?? [],
+      cwd
+    );
+
+  return {
+    ...normalized,
+
+    tokens: [
+      ...new Set([
+        ...(normalized.tokens ?? []),
+        ...discoveredTokens,
+      ]),
+    ],
   };
 }
 
@@ -73,12 +107,26 @@ export async function loadConfig(
 ): Promise<UIGuardConfig> {
   const candidates = explicitPath
     ? [
-        resolve(cwd, explicitPath),
+        resolve(
+          cwd,
+          explicitPath
+        ),
       ]
     : [
-        resolve(cwd, 'ui-guard.config.mjs'),
-        resolve(cwd, 'ui-guard.config.js'),
-        resolve(cwd, 'ui-guard.config.cjs'),
+        resolve(
+          cwd,
+          'ui-guard.config.mjs'
+        ),
+
+        resolve(
+          cwd,
+          'ui-guard.config.js'
+        ),
+
+        resolve(
+          cwd,
+          'ui-guard.config.cjs'
+        ),
       ];
 
   for (const candidate of candidates) {
@@ -86,11 +134,15 @@ export async function loadConfig(
       continue;
     }
 
-    const imported = await import(
-      pathToFileURL(candidate).href
-    );
+    const imported =
+      await import(
+        pathToFileURL(
+          candidate
+        ).href
+      );
 
-    const rawConfig = imported.default
+    const rawConfig =
+      imported.default
       ?? imported;
 
     if (
@@ -102,8 +154,9 @@ export async function loadConfig(
       );
     }
 
-    return normalizeConfig(
-      rawConfig as UIGuardConfig
+    return resolveConfig(
+      rawConfig as UIGuardConfig,
+      dirname(candidate)
     );
   }
 
@@ -113,5 +166,8 @@ export async function loadConfig(
     );
   }
 
-  return normalizeConfig();
+  return resolveConfig(
+    {},
+    cwd
+  );
 }

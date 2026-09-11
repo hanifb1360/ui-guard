@@ -24,3 +24,6 @@ The project follows Semantic Versioning.
 * ESLint flat-config adapter backed by the same `ui-guard` analysis engine.
 * `@hb1360/ui-guard/eslint` package export.
 * Shared `off`, `warn`, and `error` severity between CLI and ESLint.
+* CSS custom-property token-source discovery.
+* JSON token-source discovery for explicit CSS variables, `$value`, and `value` token objects.
+* Config-relative token-source resolution with manual/discovered token merging and deduplication.
