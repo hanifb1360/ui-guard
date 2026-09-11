@@ -1,6 +1,6 @@
 {
   "name": "design-system-guard",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A TypeScript policy engine for enforcing design-system rules across React code, CI, and AI-assisted development.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
