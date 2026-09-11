@@ -92,7 +92,7 @@ const RULES: SarifRule[] = [
     },
 
     helpUri:
-      'https://github.com/hanifb1360/ui-guard#prefer-design-system-components',
+      'https://github.com/hanifb1360/design-system-guard#prefer-design-system-components',
 
     defaultConfiguration: {
       level: 'error',
@@ -117,7 +117,7 @@ const RULES: SarifRule[] = [
     },
 
     helpUri:
-      'https://github.com/hanifb1360/ui-guard#no-hardcoded-colors',
+      'https://github.com/hanifb1360/design-system-guard#no-hardcoded-colors',
 
     defaultConfiguration: {
       level: 'error',
@@ -142,7 +142,7 @@ const RULES: SarifRule[] = [
     },
 
     helpUri:
-      'https://github.com/hanifb1360/ui-guard#no-unknown-tokens',
+      'https://github.com/hanifb1360/design-system-guard#no-unknown-tokens',
 
     defaultConfiguration: {
       level: 'error',
@@ -166,7 +166,7 @@ const RULES: SarifRule[] = [
     },
 
     helpUri:
-      'https://github.com/hanifb1360/ui-guard#component-prop-policies',
+      'https://github.com/hanifb1360/design-system-guard#component-prop-policies',
 
     defaultConfiguration: {
       level: 'error',
@@ -192,7 +192,7 @@ const RULES: SarifRule[] = [
     },
 
     helpUri:
-      'https://github.com/hanifb1360/ui-guard',
+      'https://github.com/hanifb1360/design-system-guard',
 
     defaultConfiguration: {
       level: 'error',
@@ -261,7 +261,7 @@ export function diagnosticsToSarif(
     name: 'ui-guard',
 
     informationUri:
-      'https://github.com/hanifb1360/ui-guard',
+      'https://github.com/hanifb1360/design-system-guard',
 
     rules: RULES,
   };
