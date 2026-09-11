@@ -157,7 +157,7 @@ For programmatic validation:
 import {
   ConfigValidationError,
   validateConfig,
-} from '@hb1360/ui-guard';
+} from 'ui-guard';
 
 try {
   validateConfig(config);
@@ -179,7 +179,7 @@ try {
 ```ts
 import {
   defineConfig,
-} from '@hb1360/ui-guard';
+} from 'ui-guard';
 
 export default defineConfig({
   rules: {
@@ -399,7 +399,7 @@ For programmatic use, `resolveConfig()` performs token-source loading:
 ```ts
 import {
   resolveConfig,
-} from '@hb1360/ui-guard';
+} from 'ui-guard';
 
 const config = await resolveConfig(
   {
@@ -472,7 +472,7 @@ src/Checkout.tsx:6:21  error  no-unknown-tokens
 The CLI and ESLint integration use the same `ui-guard` policy engine.
 
 ```bash
-npm install -D eslint @hb1360/ui-guard
+npm install -D eslint ui-guard
 ```
 
 With ESLint flat config:
@@ -480,7 +480,7 @@ With ESLint flat config:
 ```js
 import {
   createEslintConfig,
-} from '@hb1360/ui-guard/eslint';
+} from 'ui-guard/eslint';
 
 import uiPolicy
   from './ui-guard.config.mjs';
@@ -592,7 +592,7 @@ For pull requests from forks, SARIF upload is skipped because GitHub does not gr
 import {
   analyzeSource,
   defineConfig,
-} from '@hb1360/ui-guard';
+} from 'ui-guard';
 
 const config = defineConfig({
   components: {

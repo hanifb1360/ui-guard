@@ -85,7 +85,7 @@ async function createInitialConfig(): Promise<void> {
     'ui-guard.config.mjs'
   );
 
-  const content = `/** @type {import('@hb1360/ui-guard').UIGuardConfig} */
+  const content = `/** @type {import('ui-guard').UIGuardConfig} */
 const config = {
   components: {
     button: {

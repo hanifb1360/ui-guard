@@ -116,7 +116,7 @@ import {
   analyzeSource,
   defineConfig,
   validateConfig,
-} from '@hb1360/ui-guard';
+} from 'ui-guard';
 
 const config = defineConfig({
   tokens: ['--color-primary'],
@@ -145,7 +145,7 @@ if (!Array.isArray(result)) {
 import {
   createEslintConfig,
   createEslintPlugin,
-} from '@hb1360/ui-guard/eslint';
+} from 'ui-guard/eslint';
 
 const plugin = createEslintPlugin({
   components: {
@@ -183,7 +183,7 @@ if (!config.plugins['ui-guard']) {
     `
 const {
   analyzeSource,
-} = require('@hb1360/ui-guard');
+} = require('ui-guard');
 
 const result = analyzeSource({
   filePath: 'demo.tsx',
@@ -265,16 +265,13 @@ if (!Array.isArray(result)) {
   );
 
   run(
-    process.execPath,
+    join(
+      temporaryDirectory,
+      'node_modules',
+      '.bin',
+      'ui-guard'
+    ),
     [
-      join(
-        temporaryDirectory,
-        'node_modules',
-        '@hb1360',
-        'ui-guard',
-        'dist',
-        'cli.mjs'
-      ),
       '--help',
     ]
   );
