@@ -23,7 +23,7 @@ Add:
 
 * [x] SARIF 2.1.0 output
 * [x] GitHub code-scanning workflow documentation
-* [ ] GitHub code-scanning annotations in the ui-guard repository demo
+* [ ] GitHub code-scanning annotations in the ui-guard repository demo (live workflow added; verify after merge)
 * improved diagnostics
 * [x] runtime configuration validation with path-specific errors
 * include and exclude patterns

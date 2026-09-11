@@ -23,7 +23,7 @@ That creates a recurring problem:
 
 ## Current MVP
 
-The first version implements three rules:
+The current MVP implements four rules:
 
 ### `prefer-design-system-components`
 
@@ -58,6 +58,10 @@ For example:
   }}
 />
 ```
+
+### `component-prop-policy`
+
+Enforces configured contracts for approved design-system component props, including allowed values, required props, forbidden props, and deprecations.
 
 ### `no-unknown-tokens`
 
@@ -568,6 +572,18 @@ jobs:
 ```
 
 The analyzer writes the SARIF file before returning a non-zero exit code, allowing CI to upload diagnostics and then enforce the policy.
+
+This repository also contains a live demonstration workflow:
+
+```text
+.github/workflows/ui-guard-code-scanning.yml
+```
+
+It builds `ui-guard`, scans the intentionally invalid `examples/acme` project, verifies that the generated SARIF contains exactly the three expected findings, and uploads those results to GitHub Code Scanning.
+
+The demo workflow expects the example analyzer command itself to exit with status `1`. That non-zero result represents the deliberately configured policy violations; the workflow validates those findings before uploading them.
+
+For pull requests from forks, SARIF upload is skipped because GitHub does not grant the same write permissions to untrusted fork workflows. Pushes to `main` perform the real repository Code Scanning upload.
 
 ## Programmatic API
 
