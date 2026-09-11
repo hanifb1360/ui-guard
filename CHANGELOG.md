@@ -1,10 +1,18 @@
 # Changelog
 
-All notable changes to `ui-guard` will be documented here.
+All notable changes to `design-system-guard` will be documented here.
 
 The project follows Semantic Versioning.
 
 ## Unreleased
+
+## 0.1.2 - 2026-09-12
+
+### Changed
+
+* Clarified npm branding: the package is `design-system-guard` while the CLI remains `ui-guard`.
+
+## 0.1.1 - 2026-09-11
 
 ### Changed
 

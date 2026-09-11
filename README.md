@@ -1,14 +1,16 @@
-# ui-guard
+# design-system-guard
 
 A TypeScript policy engine for enforcing design-system rules across React code, CI, and AI-assisted development.
 
-`ui-guard` analyzes JavaScript, TypeScript, JSX, and TSX source code and reports UI code that violates the design-system policy defined by a project.
+`design-system-guard` analyzes JavaScript, TypeScript, JSX, and TSX source code and reports UI code that violates the design-system policy defined by a project.
+
+The npm package is `design-system-guard`, while the command-line tool remains `ui-guard`.
 
 The long-term goal is simple:
 
 > Define UI policy once and make it usable by developers, CI, and AI coding agents.
 
-## Why ui-guard?
+## Why design-system-guard?
 
 Modern React teams increasingly maintain internal design systems while both developers and AI coding tools generate application code.
 
@@ -19,7 +21,7 @@ That creates a recurring problem:
 * design-system rules are documented but not enforced
 * AI coding agents do not automatically know a company's UI constraints
 
-`ui-guard` turns part of that design-system policy into machine-readable rules.
+`design-system-guard` turns part of that design-system policy into machine-readable rules.
 
 ## Current MVP
 
