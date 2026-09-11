@@ -29,3 +29,6 @@ The project follows Semantic Versioning.
 * Config-relative token-source resolution with manual/discovered token merging and deduplication.
 * Component prop contracts for allowed values, required props, forbidden props, and deprecated props.
 * Import-source-aware component matching with support for aliased named imports.
+* Runtime configuration validation with path-specific error messages.
+* Validation for rule levels, component definitions, prop policies, tokens, and token sources.
+* Modernized `ui-guard init` template with component prop policies and all current rules.

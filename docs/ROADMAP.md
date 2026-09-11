@@ -25,7 +25,7 @@ Add:
 * [x] GitHub code-scanning workflow documentation
 * [ ] GitHub code-scanning annotations in the ui-guard repository demo
 * improved diagnostics
-* configuration validation
+* [x] runtime configuration validation with path-specific errors
 * include and exclude patterns
 * warning thresholds
 

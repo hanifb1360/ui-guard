@@ -91,13 +91,34 @@ const config = {
     button: {
       name: 'Button',
       from: '@acme/ui',
+
+      props: {
+        variant: {
+          allowed: [
+            'primary',
+            'secondary',
+            'danger',
+          ],
+        },
+
+        size: {
+          allowed: [
+            'sm',
+            'md',
+            'lg',
+          ],
+        },
+      },
     },
+
     input: {
       name: 'Input',
       from: '@acme/ui',
     },
   },
 
+  // You can replace this list with tokenSources
+  // pointing to CSS or JSON design-token files.
   tokens: [
     '--color-primary',
     '--color-danger',
@@ -107,6 +128,7 @@ const config = {
   ],
 
   rules: {
+    'component-prop-policy': 'error',
     'no-hardcoded-colors': 'error',
     'prefer-design-system-components': 'error',
     'no-unknown-tokens': 'error',
