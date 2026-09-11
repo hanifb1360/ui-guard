@@ -44,8 +44,8 @@ The CLI and ESLint integration use the same analysis engine rather than maintain
 
 Add:
 
-* CSS token extraction
-* JSON design-token extraction
+* [x] CSS custom-property token extraction
+* [x] JSON design-token extraction
 * spacing token rules
 * typography token rules
 * component prop policies

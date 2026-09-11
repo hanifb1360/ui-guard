@@ -4,18 +4,15 @@ const config = {
       name: 'Button',
       from: '@acme/ui',
     },
+
     input: {
       name: 'Input',
       from: '@acme/ui',
     },
   },
 
-  tokens: [
-    '--color-primary',
-    '--color-danger',
-    '--color-surface',
-    '--space-sm',
-    '--space-md',
+  tokenSources: [
+    './tokens.css',
   ],
 
   rules: {

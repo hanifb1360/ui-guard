@@ -115,6 +115,127 @@ const config = {
 export default config;
 ```
 
+## Design-token sources
+
+Token names do not have to be copied manually into the configuration.
+
+`ui-guard` can discover tokens from CSS and JSON files:
+
+```js
+const config = {
+  tokenSources: [
+    './src/styles/tokens.css',
+    './design-tokens.json',
+  ],
+};
+
+export default config;
+```
+
+Paths are resolved relative to the `ui-guard` configuration file.
+
+### CSS
+
+Given:
+
+```css
+:root {
+  --color-primary: #2563eb;
+  --color-surface: #ffffff;
+  --space-md: 16px;
+}
+```
+
+`ui-guard` discovers:
+
+```text
+--color-primary
+--color-surface
+--space-md
+```
+
+### JSON
+
+Explicit CSS custom-property keys are supported:
+
+```json
+{
+  "--color-primary": "#2563eb"
+}
+```
+
+Nested token objects using `$value` are also supported:
+
+```json
+{
+  "color": {
+    "primary": {
+      "$value": "#2563eb"
+    }
+  }
+}
+```
+
+This becomes:
+
+```text
+--color-primary
+```
+
+Objects using a `value` field are supported in the same way:
+
+```json
+{
+  "spacing": {
+    "medium": {
+      "value": "16px"
+    }
+  }
+}
+```
+
+which becomes:
+
+```text
+--spacing-medium
+```
+
+Manual tokens and discovered tokens can be combined:
+
+```js
+const config = {
+  tokens: [
+    '--temporary-token',
+  ],
+
+  tokenSources: [
+    './tokens.css',
+  ],
+};
+```
+
+Duplicate token names are removed automatically.
+
+For programmatic use, `resolveConfig()` performs token-source loading:
+
+```ts
+import {
+  resolveConfig,
+} from '@hb1360/ui-guard';
+
+const config = await resolveConfig(
+  {
+    tokenSources: [
+      './tokens.css',
+    ],
+  },
+
+  process.cwd(),
+);
+```
+
+When using `loadConfig()`, token sources are resolved automatically.
+
 ## CLI
 
 Check the default `src` directory:
