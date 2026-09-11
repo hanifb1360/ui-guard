@@ -1,0 +1,172 @@
+name: UI Guard Code Scanning
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+concurrency:
+  group: ui-guard-code-scanning-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  scan:
+    name: Scan demo with ui-guard
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build ui-guard
+        run: npm run build
+
+      - name: Generate demo SARIF
+        shell: bash
+        run: |
+          set +e
+
+          node dist/cli.mjs check examples/acme/src \
+            --config examples/acme/ui-guard.config.mjs \
+            --sarif artifacts/ui-guard.sarif
+
+          status=$?
+          set -e
+
+          if [ "$status" -ne 1 ]; then
+            echo "Expected the intentionally invalid demo to exit with status 1."
+            echo "Actual exit status: $status"
+            exit 1
+          fi
+
+          echo "ui-guard found the expected demo violations."
+
+      - name: Verify SARIF
+        run: |
+          node --input-type=module <<'NODE'
+          import {
+            readFileSync,
+          } from 'node:fs';
+
+          const sarif =
+            JSON.parse(
+              readFileSync(
+                'artifacts/ui-guard.sarif',
+                'utf8'
+              )
+            );
+
+          if (sarif.version !== '2.1.0') {
+            throw new Error(
+              `Unexpected SARIF version: ${sarif.version}`
+            );
+          }
+
+          const run =
+            sarif.runs?.[0];
+
+          if (!run) {
+            throw new Error(
+              'SARIF contains no runs.'
+            );
+          }
+
+          if (
+            run.tool?.driver?.name
+            !== 'ui-guard'
+          ) {
+            throw new Error(
+              'SARIF tool name is not ui-guard.'
+            );
+          }
+
+          const results =
+            run.results ?? [];
+
+          if (results.length !== 3) {
+            throw new Error(
+              `Expected 3 demo findings, received ${results.length}.`
+            );
+          }
+
+          const expectedRules =
+            new Set([
+              'prefer-design-system-components',
+              'no-hardcoded-colors',
+              'no-unknown-tokens',
+            ]);
+
+          const actualRules =
+            new Set(
+              results.map(
+                result =>
+                  result.ruleId
+              )
+            );
+
+          if (
+            expectedRules.size
+            !== actualRules.size
+            || [
+              ...expectedRules,
+            ].some(
+              ruleId =>
+                !actualRules.has(
+                  ruleId
+                )
+            )
+          ) {
+            throw new Error(
+              `Unexpected SARIF rules: ${[
+                ...actualRules,
+              ].join(', ')}`
+            );
+          }
+
+          console.log(
+            '✓ SARIF 2.1.0 contains the 3 expected ui-guard findings.'
+          );
+
+          for (const result of results) {
+            const location =
+              result.locations?.[0]
+                ?.physicalLocation;
+
+            console.log(
+              `  ${result.ruleId} -> ${location?.artifactLocation?.uri}:${location?.region?.startLine}`
+            );
+          }
+          NODE
+
+      - name: Upload SARIF to GitHub Code Scanning
+        if: >-
+          ${{
+            always()
+            && (
+              github.event_name != 'pull_request'
+              || github.event.pull_request.head.repo.full_name == github.repository
+            )
+          }}
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: artifacts/ui-guard.sarif
+          category: ui-guard-demo

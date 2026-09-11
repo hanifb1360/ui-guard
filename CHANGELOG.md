@@ -32,3 +32,5 @@ The project follows Semantic Versioning.
 * Runtime configuration validation with path-specific error messages.
 * Validation for rule levels, component definitions, prop policies, tokens, and token sources.
 * Modernized `ui-guard init` template with component prop policies and all current rules.
+* Live GitHub Code Scanning demo workflow backed by `ui-guard` SARIF output.
+* CI verification that the demo SARIF contains the expected rule IDs and result count.
