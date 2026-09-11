@@ -84,5 +84,10 @@
   },
   "peerDependencies": {
     "eslint": ">=9 <11"
+  },
+  "peerDependenciesMeta": {
+    "eslint": {
+      "optional": true
+    }
   }
 }

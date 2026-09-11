@@ -1,5 +1,6 @@
 import {
   execFileSync,
+  spawnSync,
 } from 'node:child_process';
 
 import {
@@ -193,6 +194,37 @@ if (!Array.isArray(result)) {
   throw new Error('CommonJS API failed.');
 }
 `
+  );
+
+  console.log(
+    'Verifying ESLint is not auto-installed for core consumers...'
+  );
+
+  const eslintLookup =
+    spawnSync(
+      'npm',
+      [
+        'ls',
+        'eslint',
+        '--depth=0',
+      ],
+      {
+        cwd:
+          temporaryDirectory,
+
+        encoding:
+          'utf8',
+      }
+    );
+
+  if (eslintLookup.status === 0) {
+    throw new Error(
+      'ESLint was automatically installed even though it is an optional peer.'
+    );
+  }
+
+  console.log(
+    'ESLint optional-peer check passed.'
   );
 
   console.log(

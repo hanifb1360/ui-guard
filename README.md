@@ -511,6 +511,7 @@ For TypeScript and TSX projects, keep using the project's normal TypeScript-awar
 The adapter exposes:
 
 ```text
+ui-guard/component-prop-policy
 ui-guard/prefer-design-system-components
 ui-guard/no-hardcoded-colors
 ui-guard/no-unknown-tokens
@@ -649,18 +650,16 @@ The example intentionally contains violations, so the demo command exits with a 
 
 ## Project direction
 
-The MVP focuses on a small static-analysis core.
+The current MVP includes the static-analysis core, CLI, ESLint adapter, SARIF output, GitHub Code Scanning integration, CSS and JSON token sources, component prop contracts, and runtime configuration validation.
 
-Planned areas include:
+Future work includes:
 
-* SARIF output for GitHub code scanning
-* ESLint integration backed by the same rule engine
 * autofix and structured replacement suggestions
 * accessibility-aware design-system policies
+* spacing and typography policies
 * Storybook integration
 * machine-readable policy output for AI coding agents
 * generated agent skills and project instructions
-* richer token sources such as CSS and design-token files
 
 See `docs/ROADMAP.md`.
 
