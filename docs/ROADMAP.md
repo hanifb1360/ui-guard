@@ -48,7 +48,7 @@ Add:
 * [x] JSON design-token extraction
 * spacing token rules
 * typography token rules
-* component prop policies
+* [x] component prop policies for allowed values, required props, forbidden props, and deprecations
 * deprecated component detection
 * approved replacement suggestions
 

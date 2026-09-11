@@ -157,6 +157,32 @@ const RULES: SarifRule[] = [
   },
 
   {
+    id: 'component-prop-policy',
+    name: 'ComponentPropPolicy',
+
+    shortDescription: {
+      text:
+        'Enforce configured contracts for design-system component props.',
+    },
+
+    helpUri:
+      'https://github.com/hanifb1360/ui-guard#component-prop-policies',
+
+    defaultConfiguration: {
+      level: 'error',
+    },
+
+    properties: {
+      tags: [
+        'design-system',
+        'react',
+        'component-api',
+        'maintainability',
+      ],
+    },
+  },
+
+  {
     id: 'parse-error',
     name: 'ParseError',
 

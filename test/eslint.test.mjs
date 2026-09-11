@@ -23,6 +23,9 @@ const policy = {
   ],
 
   rules: {
+    'component-prop-policy':
+      'error',
+
     'prefer-design-system-components':
       'error',
 
@@ -186,10 +189,79 @@ test(
       ).sort(),
 
       [
+        'component-prop-policy',
         'no-hardcoded-colors',
         'no-unknown-tokens',
         'prefer-design-system-components',
       ].sort()
+    );
+  }
+);
+
+
+test(
+  'ESLint reports component prop policy violations',
+  () => {
+    const messages =
+      lint(
+        `
+          import {
+            Button,
+          } from '@acme/ui';
+
+          export const Example = () => (
+            <Button variant="invalid">
+              Save
+            </Button>
+          );
+        `,
+
+        {
+          components: {
+            button: {
+              name: 'Button',
+              from: '@acme/ui',
+
+              props: {
+                variant: {
+                  allowed: [
+                    'primary',
+                    'secondary',
+                  ],
+                },
+              },
+            },
+          },
+
+          rules: {
+            'component-prop-policy':
+              'warn',
+
+            'prefer-design-system-components':
+              'off',
+
+            'no-hardcoded-colors':
+              'off',
+
+            'no-unknown-tokens':
+              'off',
+          },
+        }
+      );
+
+    assert.equal(
+      messages.length,
+      1
+    );
+
+    assert.equal(
+      messages[0]?.ruleId,
+      'ui-guard/component-prop-policy'
+    );
+
+    assert.equal(
+      messages[0]?.severity,
+      1
     );
   }
 );
