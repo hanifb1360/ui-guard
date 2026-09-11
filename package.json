@@ -1,12 +1,12 @@
 {
-  "name": "@hb1360/ui-guard",
-  "version": "0.1.0",
+  "name": "ui-guard",
+  "version": "0.1.1",
   "description": "A TypeScript policy engine for enforcing design-system rules across React code, CI, and AI-assisted development.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "bin": {
-    "ui-guard": "./dist/cli.mjs"
+    "ui-guard": "dist/cli.mjs"
   },
   "exports": {
     ".": {

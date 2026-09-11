@@ -270,7 +270,7 @@ export function createEslintPlugin(
   return {
     meta: {
       name:
-        '@hb1360/ui-guard',
+        'ui-guard',
     },
 
     rules,

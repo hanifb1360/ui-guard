@@ -6,6 +6,11 @@ The project follows Semantic Versioning.
 
 ## Unreleased
 
+### Changed
+
+* Renamed the npm package from `@hb1360/ui-guard` to `ui-guard`.
+* The ESLint adapter is now imported from `ui-guard/eslint`.
+
 ## 0.1.0 - 2026-09-11
 
 ### Added
