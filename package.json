@@ -14,7 +14,12 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./eslint": {
+      "types": "./dist/eslint.d.ts",
+      "import": "./dist/eslint.mjs",
+      "require": "./dist/eslint.cjs"
+    }
   },
   "files": [
     "dist",
@@ -29,11 +34,13 @@
     "build:esm": "esbuild src/index.ts --bundle --packages=external --platform=node --format=esm --target=node22 --outfile=dist/index.mjs",
     "build:cjs": "esbuild src/index.ts --bundle --packages=external --platform=node --format=cjs --target=node22 --outfile=dist/index.cjs",
     "build:cli": "esbuild src/cli.ts --bundle --packages=external --platform=node --format=esm --target=node22 --banner:js=\"#!/usr/bin/env node\" --outfile=dist/cli.mjs && node -e \"require('node:fs').chmodSync('dist/cli.mjs', 0o755)\"",
-    "build": "npm run clean && npm run typecheck && npm run build:types && npm run build:esm && npm run build:cjs && npm run build:cli",
+    "build": "npm run clean && npm run typecheck && npm run build:types && npm run build:esm && npm run build:cjs && npm run build:eslint:esm && npm run build:eslint:cjs && npm run build:cli",
     "test": "npm run build && node --test",
     "test:consumer": "node scripts/consumer-check.mjs",
     "demo": "npm run build && node dist/cli.mjs check examples/acme/src --config examples/acme/ui-guard.config.mjs",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "build:eslint:esm": "esbuild src/eslint.ts --bundle --packages=external --platform=node --format=esm --target=node22 --outfile=dist/eslint.mjs",
+    "build:eslint:cjs": "esbuild src/eslint.ts --bundle --packages=external --platform=node --format=cjs --target=node22 --outfile=dist/eslint.cjs"
   },
   "keywords": [
     "react",
@@ -69,9 +76,13 @@
   "devDependencies": {
     "@types/node": "^22.20.2",
     "esbuild": "^0.28.2",
+    "eslint": "^10.10.0",
     "typescript": "^7.0.2"
   },
   "allowScripts": {
     "esbuild@0.28.2": true
+  },
+  "peerDependencies": {
+    "eslint": ">=9 <11"
   }
 }

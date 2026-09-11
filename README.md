@@ -168,6 +168,57 @@ src/Checkout.tsx:6:21  error  no-unknown-tokens
   Unknown design token "--color-brand".
 ```
 
+## ESLint integration
+
+The CLI and ESLint integration use the same `ui-guard` policy engine.
+
+```bash
+npm install -D eslint @hb1360/ui-guard
+```
+
+With ESLint flat config:
+
+```js
+import {
+  createEslintConfig,
+} from '@hb1360/ui-guard/eslint';
+
+import uiPolicy
+  from './ui-guard.config.mjs';
+
+export default [
+  {
+    files: [
+      '**/*.{js,jsx}',
+    ],
+
+    ...createEslintConfig(
+      uiPolicy
+    ),
+
+    languageOptions: {
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
+  },
+];
+```
+
+For TypeScript and TSX projects, keep using the project's normal TypeScript-aware ESLint parser. `ui-guard` reuses ESLint's source text and does not replace the project's parser.
+
+The adapter exposes:
+
+```text
+ui-guard/prefer-design-system-components
+ui-guard/no-hardcoded-colors
+ui-guard/no-unknown-tokens
+```
+
+The same `off`, `warn`, and `error` values in the `ui-guard` policy control ESLint severity.
+
 ## GitHub code scanning
 
 `ui-guard` can generate SARIF 2.1.0 so violations can be uploaded to GitHub code scanning.
