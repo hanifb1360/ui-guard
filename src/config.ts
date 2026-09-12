@@ -24,7 +24,7 @@ import type {
   RuleConfiguration,
   RuleId,
   RuleLevel,
-  UIGuardConfig,
+  DesignSystemGuardConfig,
 } from './types';
 
 const DEFAULT_RULES:
@@ -43,7 +43,7 @@ const DEFAULT_RULES:
   };
 
 export function defineConfig<
-  T extends UIGuardConfig
+  T extends DesignSystemGuardConfig
 >(
   config: T
 ): T {
@@ -55,8 +55,8 @@ export function defineConfig<
 }
 
 export function normalizeConfig(
-  config: UIGuardConfig = {}
-): UIGuardConfig {
+  config: DesignSystemGuardConfig = {}
+): DesignSystemGuardConfig {
   validateConfig(
     config
   );
@@ -82,9 +82,9 @@ export function normalizeConfig(
 }
 
 export async function resolveConfig(
-  config: UIGuardConfig = {},
+  config: DesignSystemGuardConfig = {},
   cwd = process.cwd()
-): Promise<UIGuardConfig> {
+): Promise<DesignSystemGuardConfig> {
   const normalized =
     normalizeConfig(
       config
@@ -109,7 +109,7 @@ export async function resolveConfig(
 }
 
 export function getRuleLevel(
-  config: UIGuardConfig,
+  config: DesignSystemGuardConfig,
   ruleId: RuleId
 ): RuleLevel {
   return config.rules?.[ruleId]
@@ -143,7 +143,7 @@ function validationErrorForFile(
 export async function loadConfig(
   cwd = process.cwd(),
   explicitPath?: string
-): Promise<UIGuardConfig> {
+): Promise<DesignSystemGuardConfig> {
   const candidates =
     explicitPath
       ? [
@@ -153,6 +153,21 @@ export async function loadConfig(
           ),
         ]
       : [
+          resolve(
+            cwd,
+            'design-system-guard.config.mjs'
+          ),
+
+          resolve(
+            cwd,
+            'design-system-guard.config.js'
+          ),
+
+          resolve(
+            cwd,
+            'design-system-guard.config.cjs'
+          ),
+
           resolve(
             cwd,
             'ui-guard.config.mjs'
@@ -194,7 +209,7 @@ export async function loadConfig(
 
     try {
       return await resolveConfig(
-        rawConfig as UIGuardConfig,
+        rawConfig as DesignSystemGuardConfig,
         dirname(candidate)
       );
     } catch (error) {
@@ -214,7 +229,7 @@ export async function loadConfig(
 
   if (explicitPath) {
     throw new Error(
-      `Could not find ui-guard config: ${explicitPath}`
+      `Could not find design-system-guard config: ${explicitPath}`
     );
   }
 

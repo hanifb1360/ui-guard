@@ -11,7 +11,7 @@ import type {
   Diagnostic,
   RuleId,
   RuleLevel,
-  UIGuardConfig,
+  DesignSystemGuardConfig,
 } from './types';
 
 export interface EslintSourceCodeLike {
@@ -59,7 +59,7 @@ export interface EslintRuleLike {
   };
 }
 
-export interface UIGuardEslintPlugin {
+export interface DesignSystemGuardEslintPlugin {
   meta: {
     name: string;
   };
@@ -71,15 +71,15 @@ export interface UIGuardEslintPlugin {
     >;
 }
 
-export interface UIGuardFlatEslintConfig {
+export interface DesignSystemGuardFlatEslintConfig {
   plugins: {
-    'ui-guard':
-      UIGuardEslintPlugin;
+    'design-system-guard':
+      DesignSystemGuardEslintPlugin;
   };
 
   rules:
     Record<
-      `ui-guard/${RuleId}`,
+      `design-system-guard/${RuleId}`,
       RuleLevel
     >;
 }
@@ -119,7 +119,7 @@ function getSourceCode(
   }
 
   throw new Error(
-    'ui-guard could not access ESLint SourceCode.'
+    'design-system-guard could not access ESLint SourceCode.'
   );
 }
 
@@ -151,8 +151,8 @@ function formatDiagnostic(
 }
 
 export function createEslintPlugin(
-  config: UIGuardConfig = {}
-): UIGuardEslintPlugin {
+  config: DesignSystemGuardConfig = {}
+): DesignSystemGuardEslintPlugin {
   const normalizedConfig =
     normalizeConfig(config);
 
@@ -278,8 +278,8 @@ export function createEslintPlugin(
 }
 
 export function createEslintConfig(
-  config: UIGuardConfig = {}
-): UIGuardFlatEslintConfig {
+  config: DesignSystemGuardConfig = {}
+): DesignSystemGuardFlatEslintConfig {
   const normalizedConfig =
     normalizeConfig(config);
 
@@ -290,7 +290,7 @@ export function createEslintConfig(
 
   const rules =
     {} as Record<
-      `ui-guard/${RuleId}`,
+      `design-system-guard/${RuleId}`,
       RuleLevel
     >;
 
@@ -299,7 +299,7 @@ export function createEslintConfig(
     of RULE_IDS
   ) {
     rules[
-      `ui-guard/${ruleId}`
+      `design-system-guard/${ruleId}`
     ] = getRuleLevel(
       normalizedConfig,
       ruleId
@@ -308,10 +308,22 @@ export function createEslintConfig(
 
   return {
     plugins: {
-      'ui-guard':
+      'design-system-guard':
         plugin,
     },
 
     rules,
   };
 }
+
+/**
+ * @deprecated Use DesignSystemGuardEslintPlugin instead.
+ */
+export type UIGuardEslintPlugin =
+  DesignSystemGuardEslintPlugin;
+
+/**
+ * @deprecated Use DesignSystemGuardFlatEslintConfig instead.
+ */
+export type UIGuardFlatEslintConfig =
+  DesignSystemGuardFlatEslintConfig;

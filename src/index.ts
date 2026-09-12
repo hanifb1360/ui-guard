@@ -51,5 +51,6 @@ export type {
   TokenSource,
   TokenSourceFormat,
   TokenSourceInput,
+  DesignSystemGuardConfig,
   UIGuardConfig,
 } from './types';

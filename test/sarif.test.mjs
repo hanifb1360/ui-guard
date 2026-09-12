@@ -67,7 +67,7 @@ test(
 
     assert.equal(
       run?.tool.driver.name,
-      'ui-guard'
+      'design-system-guard'
     );
 
     assert.equal(

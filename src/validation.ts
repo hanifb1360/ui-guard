@@ -1,6 +1,6 @@
 import type {
   ComponentPropValue,
-  UIGuardConfig,
+  DesignSystemGuardConfig,
 } from './types';
 
 const ROOT_KEYS =
@@ -595,7 +595,7 @@ function validateRules(
 
 export function validateConfig(
   config: unknown
-): asserts config is UIGuardConfig {
+): asserts config is DesignSystemGuardConfig {
   const root =
     asRecord(
       config,

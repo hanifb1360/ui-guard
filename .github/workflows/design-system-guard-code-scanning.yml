@@ -1,4 +1,4 @@
-name: UI Guard Code Scanning
+name: Design System Guard Code Scanning
 
 on:
   push:
@@ -16,12 +16,12 @@ permissions:
   security-events: write
 
 concurrency:
-  group: ui-guard-code-scanning-${{ github.workflow }}-${{ github.ref }}
+  group: design-system-guard-code-scanning-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   scan:
-    name: Scan demo with ui-guard
+    name: Scan demo with design-system-guard
     runs-on: ubuntu-latest
 
     steps:
@@ -37,7 +37,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build ui-guard
+      - name: Build design-system-guard
         run: npm run build
 
       - name: Generate demo SARIF
@@ -46,8 +46,8 @@ jobs:
           set +e
 
           node dist/cli.mjs check examples/acme/src \
-            --config examples/acme/ui-guard.config.mjs \
-            --sarif artifacts/ui-guard.sarif
+            --config examples/acme/design-system-guard.config.mjs \
+            --sarif artifacts/design-system-guard.sarif
 
           status=$?
           set -e
@@ -58,7 +58,7 @@ jobs:
             exit 1
           fi
 
-          echo "ui-guard found the expected demo violations."
+          echo "design-system-guard found the expected demo violations."
 
       - name: Verify SARIF
         run: |
@@ -70,7 +70,7 @@ jobs:
           const sarif =
             JSON.parse(
               readFileSync(
-                'artifacts/ui-guard.sarif',
+                'artifacts/design-system-guard.sarif',
                 'utf8'
               )
             );
@@ -92,10 +92,10 @@ jobs:
 
           if (
             run.tool?.driver?.name
-            !== 'ui-guard'
+            !== 'design-system-guard'
           ) {
             throw new Error(
-              'SARIF tool name is not ui-guard.'
+              'SARIF tool name is not design-system-guard.'
             );
           }
 
@@ -143,7 +143,7 @@ jobs:
           }
 
           console.log(
-            '✓ SARIF 2.1.0 contains the 3 expected ui-guard findings.'
+            '✓ SARIF 2.1.0 contains the 3 expected design-system-guard findings.'
           );
 
           for (const result of results) {
@@ -168,5 +168,5 @@ jobs:
           }}
         uses: github/codeql-action/upload-sarif@v4
         with:
-          sarif_file: artifacts/ui-guard.sarif
-          category: ui-guard-demo
+          sarif_file: artifacts/design-system-guard.sarif
+          category: design-system-guard-demo

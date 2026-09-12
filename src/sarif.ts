@@ -188,7 +188,7 @@ const RULES: SarifRule[] = [
 
     shortDescription: {
       text:
-        'Source code could not be parsed by ui-guard.',
+        'Source code could not be parsed by design-system-guard.',
     },
 
     helpUri:
@@ -258,7 +258,7 @@ export function diagnosticsToSarif(
     ?? process.cwd();
 
   const driver: SarifDriver = {
-    name: 'ui-guard',
+    name: 'design-system-guard',
 
     informationUri:
       'https://github.com/hanifb1360/design-system-guard',

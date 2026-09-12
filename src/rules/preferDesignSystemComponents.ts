@@ -4,7 +4,7 @@ import {
 
 import type {
   Diagnostic,
-  UIGuardConfig,
+  DesignSystemGuardConfig,
 } from '../types';
 
 import {
@@ -23,7 +23,7 @@ const RULE_ID =
 export function checkPreferDesignSystemComponents(
   ast: AstNode,
   filePath: string,
-  config: UIGuardConfig
+  config: DesignSystemGuardConfig
 ): Diagnostic[] {
   const level = getRuleLevel(
     config,

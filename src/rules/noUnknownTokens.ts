@@ -4,7 +4,7 @@ import {
 
 import type {
   Diagnostic,
-  UIGuardConfig,
+  DesignSystemGuardConfig,
 } from '../types';
 
 import {
@@ -55,7 +55,7 @@ function getLiteralText(
 export function checkNoUnknownTokens(
   ast: AstNode,
   filePath: string,
-  config: UIGuardConfig
+  config: DesignSystemGuardConfig
 ): Diagnostic[] {
   const level = getRuleLevel(
     config,
@@ -102,7 +102,7 @@ export function checkNoUnknownTokens(
           RULE_ID,
           level,
           `Unknown design token "${token}".`,
-          'Use a token declared in the ui-guard configuration.'
+          'Use a token declared in the design-system-guard configuration.'
         )
       );
     }
