@@ -121,7 +121,7 @@ export default config;
 
 ## Configuration validation
 
-`ui-guard` validates its configuration at runtime, including JavaScript configuration files.
+`design-system-guard` validates its configuration at runtime, including JavaScript configuration files.
 
 Validation covers:
 
@@ -191,7 +191,7 @@ export default defineConfig({
 
 ## Component prop policies
 
-`ui-guard` can enforce the public prop contract of an approved design-system component.
+`design-system-guard` can enforce the public prop contract of an approved design-system component.
 
 ```js
 const config = {
@@ -258,7 +258,7 @@ export function Example() {
 }
 ```
 
-`ui-guard` can report:
+`design-system-guard` can report:
 
 ```text
 <Button> prop "variant" received "banana", which is not allowed.
@@ -297,7 +297,7 @@ Presence-based policies such as `required`, `forbidden`, and `deprecated` are st
 
 Token names do not have to be copied manually into the configuration.
 
-`ui-guard` can discover tokens from CSS and JSON files:
+`design-system-guard` can discover tokens from CSS and JSON files:
 
 ```js
 const config = {
@@ -310,7 +310,7 @@ const config = {
 export default config;
 ```
 
-Paths are resolved relative to the `ui-guard` configuration file.
+Paths are resolved relative to the configuration file.
 
 ### CSS
 
@@ -324,7 +324,7 @@ Given:
 }
 ```
 
-`ui-guard` discovers:
+`design-system-guard` discovers:
 
 ```text
 --color-primary
@@ -444,7 +444,7 @@ ui-guard check src --json
 Generate SARIF 2.1.0 output for CI and code-scanning tools:
 
 ```bash
-ui-guard check src --sarif ui-guard.sarif
+ui-guard check src --sarif design-system-guard.sarif
 ```
 
 Generate an initial configuration:
@@ -469,7 +469,7 @@ src/Checkout.tsx:6:21  error  no-unknown-tokens
 
 ## ESLint integration
 
-The CLI and ESLint integration use the same `ui-guard` policy engine.
+The CLI and ESLint integration use the same `design-system-guard` policy engine.
 
 ```bash
 npm install -D eslint design-system-guard
@@ -506,7 +506,7 @@ export default [
 ];
 ```
 
-For TypeScript and TSX projects, keep using the project's normal TypeScript-aware ESLint parser. `ui-guard` reuses ESLint's source text and does not replace the project's parser.
+For TypeScript and TSX projects, keep using the project's normal TypeScript-aware ESLint parser. `design-system-guard` reuses ESLint's source text and does not replace the project's parser.
 
 The adapter exposes:
 
@@ -517,16 +517,16 @@ ui-guard/no-hardcoded-colors
 ui-guard/no-unknown-tokens
 ```
 
-The same `off`, `warn`, and `error` values in the `ui-guard` policy control ESLint severity.
+The same `off`, `warn`, and `error` values in the `design-system-guard` policy control ESLint severity.
 
 ## GitHub code scanning
 
-`ui-guard` can generate SARIF 2.1.0 so violations can be uploaded to GitHub code scanning.
+`design-system-guard` can generate SARIF 2.1.0 so violations can be uploaded to GitHub code scanning.
 
 A GitHub Actions workflow can run the analyzer, upload its diagnostics, and still fail the build when policy errors are found:
 
 ```yaml
-name: UI Guard
+name: Design System Guard
 
 on:
   pull_request:
@@ -539,7 +539,7 @@ permissions:
   security-events: write
 
 jobs:
-  ui-guard:
+  design-system-guard:
     runs-on: ubuntu-latest
 
     steps:
@@ -555,20 +555,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run ui-guard
-        id: ui_guard
+      - name: Run design-system-guard
+        id: design_system_guard
         continue-on-error: true
-        run: npx ui-guard check src --sarif ui-guard.sarif
+        run: npx ui-guard check src --sarif design-system-guard.sarif
 
       - name: Upload SARIF
         if: always()
         uses: github/codeql-action/upload-sarif@v4
         with:
-          sarif_file: ui-guard.sarif
-          category: ui-guard
+          sarif_file: design-system-guard.sarif
+          category: design-system-guard
 
       - name: Fail on policy violations
-        if: steps.ui_guard.outcome == 'failure'
+        if: steps.design_system_guard.outcome == 'failure'
         run: exit 1
 ```
 
@@ -580,7 +580,7 @@ This repository also contains a live demonstration workflow:
 .github/workflows/ui-guard-code-scanning.yml
 ```
 
-It builds `ui-guard`, scans the intentionally invalid `examples/acme` project, verifies that the generated SARIF contains exactly the three expected findings, and uploads those results to GitHub Code Scanning.
+It builds `design-system-guard`, scans the intentionally invalid `examples/acme` project, verifies that the generated SARIF contains exactly the three expected findings, and uploads those results to GitHub Code Scanning.
 
 The demo workflow expects the example analyzer command itself to exit with status `1`. That non-zero result represents the deliberately configured policy violations; the workflow validates those findings before uploading them.
 
