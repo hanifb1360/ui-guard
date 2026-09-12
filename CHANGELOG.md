@@ -6,6 +6,12 @@ The project follows Semantic Versioning.
 
 ## Unreleased
 
+## 0.1.5 - 2026-09-12
+
+### Changed
+
+* Standardized README product branding as `design-system-guard`.
+
 ## 0.1.4 - 2026-09-12
 
 ### Changed
