@@ -7,7 +7,7 @@ import type {
   ComponentPropValue,
   DesignSystemComponent,
   Diagnostic,
-  UIGuardConfig,
+  DesignSystemGuardConfig,
 } from '../types';
 
 import {
@@ -313,7 +313,7 @@ function replacementSuggestion(
 }
 
 function buildConfiguredComponents(
-  config: UIGuardConfig
+  config: DesignSystemGuardConfig
 ): Map<
   string,
   Map<string, DesignSystemComponent>
@@ -540,7 +540,7 @@ function collectAttributes(
 export function checkComponentPropPolicy(
   ast: AstNode,
   filePath: string,
-  config: UIGuardConfig
+  config: DesignSystemGuardConfig
 ): Diagnostic[] {
   const level =
     getRuleLevel(

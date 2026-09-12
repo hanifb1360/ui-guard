@@ -4,7 +4,7 @@ import {
 
 import type {
   Diagnostic,
-  UIGuardConfig,
+  DesignSystemGuardConfig,
 } from '../types';
 
 import {
@@ -56,7 +56,7 @@ function getLiteralText(
 export function checkNoHardcodedColors(
   ast: AstNode,
   filePath: string,
-  config: UIGuardConfig
+  config: DesignSystemGuardConfig
 ): Diagnostic[] {
   const level = getRuleLevel(
     config,

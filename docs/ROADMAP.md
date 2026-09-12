@@ -1,4 +1,4 @@
-# ui-guard roadmap
+# design-system-guard roadmap
 
 ## Phase 1 — Static-analysis core
 
@@ -23,7 +23,7 @@ Add:
 
 * [x] SARIF 2.1.0 output
 * [x] GitHub code-scanning workflow documentation
-* [x] GitHub code-scanning annotations in the ui-guard repository demo
+* [x] GitHub code-scanning annotations in the design-system-guard repository demo
 * improved diagnostics
 * [x] runtime configuration validation with path-specific errors
 * include and exclude patterns
@@ -32,7 +32,7 @@ Add:
 ## Phase 3 — ESLint integration
 
 * [x] Flat-config compatible ESLint adapter
-* [x] Reuse the same `ui-guard` analysis engine
+* [x] Reuse the same `design-system-guard` analysis engine
 * [x] Preserve `off`, `warn`, and `error` severity
 * [x] Expose individual ESLint rule IDs
 * [x] Test the packaged ESLint subpath export
@@ -54,7 +54,7 @@ Add:
 
 ## Phase 5 — AI coding-agent integration
 
-Generate machine-readable instructions from the same ui-guard policy.
+Generate machine-readable instructions from the same design-system-guard policy.
 
 Potential outputs:
 

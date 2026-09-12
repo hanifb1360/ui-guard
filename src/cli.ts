@@ -27,19 +27,19 @@ import type {
 
 function printHelp(): void {
   console.log(`
-ui-guard
+design-system-guard
 
 Usage:
-  ui-guard check [paths...] [--config path] [--json] [--sarif file]
-  ui-guard init
-  ui-guard --help
+  design-system-guard check [paths...] [--config path] [--json] [--sarif file]
+  design-system-guard init
+  design-system-guard --help
 
 Examples:
-  ui-guard check src
-  ui-guard check src app
-  ui-guard check src --config ui-guard.config.mjs
-  ui-guard check src --json
-  ui-guard check src --sarif ui-guard.sarif
+  design-system-guard check src
+  design-system-guard check src app
+  design-system-guard check src --config design-system-guard.config.mjs
+  design-system-guard check src --json
+  design-system-guard check src --sarif design-system-guard.sarif
 `);
 }
 
@@ -82,10 +82,10 @@ function printDiagnostic(
 async function createInitialConfig(): Promise<void> {
   const target = resolve(
     process.cwd(),
-    'ui-guard.config.mjs'
+    'design-system-guard.config.mjs'
   );
 
-  const content = `/** @type {import('design-system-guard').UIGuardConfig} */
+  const content = `/** @type {import('design-system-guard').DesignSystemGuardConfig} */
 const config = {
   components: {
     button: {
@@ -154,7 +154,7 @@ export default config;
       && error.code === 'EEXIST'
     ) {
       throw new Error(
-        'ui-guard.config.mjs already exists.'
+        'design-system-guard.config.mjs already exists.'
       );
     }
 
@@ -162,7 +162,7 @@ export default config;
   }
 
   console.log(
-    'Created ui-guard.config.mjs'
+    'Created design-system-guard.config.mjs'
   );
 }
 
@@ -361,7 +361,7 @@ async function runCheck(
       === 0
     ) {
       console.log(
-        `✓ ui-guard: no violations found in ${result.files.length} file(s).`
+        `✓ design-system-guard: no violations found in ${result.files.length} file(s).`
       );
     } else {
       for (
@@ -444,7 +444,7 @@ main().catch(error => {
       : String(error);
 
   console.error(
-    `ui-guard: ${message}`
+    `design-system-guard: ${message}`
   );
 
   process.exitCode = 1;

@@ -29,7 +29,7 @@ test(
       mkdtempSync(
         join(
           tmpdir(),
-          'ui-guard-sarif-'
+          'design-system-guard-sarif-'
         )
       );
 
@@ -67,7 +67,7 @@ test(
       writeFileSync(
         join(
           temporaryDirectory,
-          'ui-guard.config.mjs'
+          'design-system-guard.config.mjs'
         ),
         `
           export default {
@@ -95,9 +95,9 @@ test(
             'check',
             'src',
             '--config',
-            'ui-guard.config.mjs',
+            'design-system-guard.config.mjs',
             '--sarif',
-            'results/ui-guard.sarif',
+            'results/design-system-guard.sarif',
           ],
           {
             cwd:
@@ -119,7 +119,7 @@ test(
             join(
               temporaryDirectory,
               'results',
-              'ui-guard.sarif'
+              'design-system-guard.sarif'
             ),
             'utf8'
           )
@@ -133,7 +133,7 @@ test(
       assert.equal(
         sarif.runs[0]
           .tool.driver.name,
-        'ui-guard'
+        'design-system-guard'
       );
 
       assert.equal(

@@ -37,7 +37,7 @@ export interface ComponentPropPolicy {
    * Static values accepted for this prop.
    *
    * Dynamic expressions are intentionally not rejected
-   * because ui-guard cannot know their runtime value.
+   * because design-system-guard cannot know their runtime value.
    */
   allowed?: ComponentPropValue[];
 
@@ -80,7 +80,7 @@ export interface RuleConfiguration {
   'no-unknown-tokens'?: RuleLevel;
 }
 
-export interface UIGuardConfig {
+export interface DesignSystemGuardConfig {
   components?: Record<
     string,
     DesignSystemComponent
@@ -92,16 +92,22 @@ export interface UIGuardConfig {
   tokens?: string[];
 
   /**
-   * CSS or JSON files from which ui-guard should discover
+   * CSS or JSON files from which design-system-guard should discover
    * design tokens.
    *
-   * Paths are resolved relative to the ui-guard config file
+   * Paths are resolved relative to the design-system-guard config file
    * when loaded through loadConfig().
    */
   tokenSources?: TokenSourceInput[];
 
   rules?: RuleConfiguration;
 }
+
+/**
+ * @deprecated Use DesignSystemGuardConfig instead.
+ */
+export type UIGuardConfig =
+  DesignSystemGuardConfig;
 
 export interface Diagnostic {
   ruleId:
@@ -119,7 +125,7 @@ export interface Diagnostic {
 export interface AnalyzeSourceInput {
   filePath: string;
   source: string;
-  config?: UIGuardConfig;
+  config?: DesignSystemGuardConfig;
 }
 
 export interface AnalyzeResult {

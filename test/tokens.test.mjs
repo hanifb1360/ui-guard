@@ -103,7 +103,7 @@ test(
       mkdtempSync(
         join(
           tmpdir(),
-          'ui-guard-tokens-'
+          'design-system-guard-tokens-'
         )
       );
 
@@ -190,7 +190,7 @@ test(
       mkdtempSync(
         join(
           tmpdir(),
-          'ui-guard-config-'
+          'design-system-guard-config-'
         )
       );
 
@@ -220,7 +220,7 @@ test(
       writeFileSync(
         join(
           configDirectory,
-          'ui-guard.config.mjs'
+          'design-system-guard.config.mjs'
         ),
         `
           export default {
@@ -234,7 +234,7 @@ test(
       const config =
         await loadConfig(
           directory,
-          'config/ui-guard.config.mjs'
+          'config/design-system-guard.config.mjs'
         );
 
       assert.deepEqual(
@@ -262,7 +262,7 @@ test(
       mkdtempSync(
         join(
           tmpdir(),
-          'ui-guard-format-'
+          'design-system-guard-format-'
         )
       );
 

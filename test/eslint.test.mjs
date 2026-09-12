@@ -82,7 +82,7 @@ function lint(
 }
 
 test(
-  'ESLint adapter reports the same ui-guard policy violations',
+  'ESLint adapter reports the same design-system-guard policy violations',
   () => {
     const messages =
       lint(`
@@ -109,9 +109,9 @@ test(
         .sort(),
 
       [
-        'ui-guard/no-hardcoded-colors',
-        'ui-guard/no-unknown-tokens',
-        'ui-guard/prefer-design-system-components',
+        'design-system-guard/no-hardcoded-colors',
+        'design-system-guard/no-unknown-tokens',
+        'design-system-guard/prefer-design-system-components',
       ].sort()
     );
 
@@ -127,7 +127,7 @@ test(
 );
 
 test(
-  'ESLint severity follows the ui-guard policy',
+  'ESLint severity follows the design-system-guard policy',
   () => {
     const messages =
       lint(
@@ -165,7 +165,7 @@ test(
 
     assert.equal(
       messages[0]?.ruleId,
-      'ui-guard/prefer-design-system-components'
+      'design-system-guard/prefer-design-system-components'
     );
 
     assert.equal(
@@ -256,7 +256,7 @@ test(
 
     assert.equal(
       messages[0]?.ruleId,
-      'ui-guard/component-prop-policy'
+      'design-system-guard/component-prop-policy'
     );
 
     assert.equal(

@@ -24,7 +24,7 @@ const temporaryDirectory =
   mkdtempSync(
     join(
       tmpdir(),
-      'ui-guard-consumer-'
+      'design-system-guard-consumer-'
     )
   );
 
@@ -169,7 +169,7 @@ if (!plugin.rules['prefer-design-system-components']) {
   throw new Error('ESLint plugin export failed.');
 }
 
-if (!config.plugins['ui-guard']) {
+if (!config.plugins['design-system-guard']) {
   throw new Error('ESLint flat config export failed.');
 }
 `
@@ -262,6 +262,22 @@ if (!Array.isArray(result)) {
 
   console.log(
     'Testing CLI consumer...'
+  );
+
+  run(
+    join(
+      temporaryDirectory,
+      'node_modules',
+      '.bin',
+      'design-system-guard'
+    ),
+    [
+      '--help',
+    ]
+  );
+
+  console.log(
+    'Testing legacy ui-guard CLI alias...'
   );
 
   run(

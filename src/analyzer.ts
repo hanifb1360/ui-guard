@@ -35,7 +35,7 @@ import type {
   AnalyzeResult,
   AnalyzeSourceInput,
   Diagnostic,
-  UIGuardConfig,
+  DesignSystemGuardConfig,
 } from './types';
 
 import type {
@@ -168,7 +168,7 @@ export function analyzeSource(
 
 export async function analyzeFile(
   filePath: string,
-  config: UIGuardConfig
+  config: DesignSystemGuardConfig
 ): Promise<Diagnostic[]> {
   const source = await readFile(
     filePath,
@@ -184,7 +184,7 @@ export async function analyzeFile(
 
 export async function analyzePaths(
   inputPaths: string[],
-  config: UIGuardConfig,
+  config: DesignSystemGuardConfig,
   cwd = process.cwd()
 ): Promise<AnalyzeResult> {
   const files = await collectSourceFiles(

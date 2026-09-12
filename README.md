@@ -84,7 +84,7 @@ can be rejected when `--color-brand` is not an approved token.
 Create:
 
 ```text
-ui-guard.config.mjs
+design-system-guard.config.mjs
 ```
 
 Example:
@@ -419,38 +419,38 @@ When using `loadConfig()`, token sources are resolved automatically.
 Check the default `src` directory:
 
 ```bash
-ui-guard check
+npx design-system-guard check
 ```
 
 Check several directories:
 
 ```bash
-ui-guard check src app components
+npx design-system-guard check src app components
 ```
 
 Use an explicit configuration:
 
 ```bash
-ui-guard check src \
-  --config ui-guard.config.mjs
+npx design-system-guard check src \
+  --config design-system-guard.config.mjs
 ```
 
 Machine-readable JSON output:
 
 ```bash
-ui-guard check src --json
+npx design-system-guard check src --json
 ```
 
 Generate SARIF 2.1.0 output for CI and code-scanning tools:
 
 ```bash
-ui-guard check src --sarif design-system-guard.sarif
+npx design-system-guard check src --sarif design-system-guard.sarif
 ```
 
 Generate an initial configuration:
 
 ```bash
-ui-guard init
+npx design-system-guard init
 ```
 
 ## Example diagnostics
@@ -483,7 +483,7 @@ import {
 } from 'design-system-guard/eslint';
 
 import uiPolicy
-  from './ui-guard.config.mjs';
+  from './design-system-guard.config.mjs';
 
 export default [
   {
@@ -511,10 +511,10 @@ For TypeScript and TSX projects, keep using the project's normal TypeScript-awar
 The adapter exposes:
 
 ```text
-ui-guard/component-prop-policy
-ui-guard/prefer-design-system-components
-ui-guard/no-hardcoded-colors
-ui-guard/no-unknown-tokens
+design-system-guard/component-prop-policy
+design-system-guard/prefer-design-system-components
+design-system-guard/no-hardcoded-colors
+design-system-guard/no-unknown-tokens
 ```
 
 The same `off`, `warn`, and `error` values in the `design-system-guard` policy control ESLint severity.
@@ -558,7 +558,7 @@ jobs:
       - name: Run design-system-guard
         id: design_system_guard
         continue-on-error: true
-        run: npx ui-guard check src --sarif design-system-guard.sarif
+        run: npx design-system-guard check src --sarif design-system-guard.sarif
 
       - name: Upload SARIF
         if: always()
@@ -577,7 +577,7 @@ The analyzer writes the SARIF file before returning a non-zero exit code, allowi
 This repository also contains a live demonstration workflow:
 
 ```text
-.github/workflows/ui-guard-code-scanning.yml
+.github/workflows/design-system-guard-code-scanning.yml
 ```
 
 It builds `design-system-guard`, scans the intentionally invalid `examples/acme` project, verifies that the generated SARIF contains exactly the three expected findings, and uploads those results to GitHub Code Scanning.

@@ -42,7 +42,7 @@ test(
       mkdtempSync(
         join(
           tmpdir(),
-          'ui-guard-invalid-config-'
+          'design-system-guard-invalid-config-'
         )
       );
 
@@ -50,7 +50,7 @@ test(
       writeFileSync(
         join(
           directory,
-          'ui-guard.config.mjs'
+          'design-system-guard.config.mjs'
         ),
 
         `
@@ -97,7 +97,7 @@ test(
 
       assert.match(
         result.stderr,
-        /ui-guard\.config\.mjs/
+        /design-system-guard\.config\.mjs/
       );
     } finally {
       rmSync(
@@ -112,13 +112,13 @@ test(
 );
 
 test(
-  'ui-guard init creates a modern valid configuration',
+  'design-system-guard init creates a modern valid configuration',
   async () => {
     const directory =
       mkdtempSync(
         join(
           tmpdir(),
-          'ui-guard-init-'
+          'design-system-guard-init-'
         )
       );
 
@@ -146,13 +146,13 @@ test(
 
       assert.match(
         result.stdout,
-        /Created ui-guard\.config\.mjs/
+        /Created design-system-guard\.config\.mjs/
       );
 
       const configPath =
         join(
           directory,
-          'ui-guard.config.mjs'
+          'design-system-guard.config.mjs'
         );
 
       const contents =
@@ -197,6 +197,90 @@ test(
           'secondary',
           'danger',
         ]
+      );
+    } finally {
+      rmSync(
+        directory,
+        {
+          recursive: true,
+          force: true,
+        }
+      );
+    }
+  }
+);
+
+test(
+  'legacy ui-guard config filename remains supported',
+  () => {
+    const directory =
+      mkdtempSync(
+        join(
+          tmpdir(),
+          'design-system-guard-legacy-config-'
+        )
+      );
+
+    try {
+      writeFileSync(
+        join(
+          directory,
+          'ui-guard.config.mjs'
+        ),
+
+        `
+          export default {
+            rules: {
+              'no-hardcoded-colors':
+                'fatal'
+            }
+          };
+        `
+      );
+
+      writeFileSync(
+        join(
+          directory,
+          'Example.jsx'
+        ),
+
+        `
+          export function Example() {
+            return <div />;
+          }
+        `
+      );
+
+      const result =
+        spawnSync(
+          process.execPath,
+          [
+            cliPath,
+            'check',
+            'Example.jsx',
+          ],
+          {
+            cwd:
+              directory,
+
+            encoding:
+              'utf8',
+          }
+        );
+
+      assert.equal(
+        result.status,
+        1
+      );
+
+      assert.match(
+        result.stderr,
+        /expected "off", "warn", or "error"/
+      );
+
+      assert.match(
+        result.stderr,
+        /ui-guard\.config\.mjs/
       );
     } finally {
       rmSync(
