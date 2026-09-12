@@ -6,6 +6,12 @@ The project follows Semantic Versioning.
 
 ## Unreleased
 
+## 0.1.4 - 2026-09-12
+
+### Changed
+
+* Improved README wording.
+
 ## 0.1.3 - 2026-09-12
 
 ### Changed
